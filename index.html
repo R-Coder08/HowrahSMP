@@ -74,29 +74,31 @@
         }
 
         /* -------------------------------------------------------------
-           1. Animated Rotating Border for Navbar
+           1. Logo Animated Glowing Border (Only for Navbar Logo)
         ------------------------------------------------------------- */
-        .animated-nav-wrapper {
+        .nav-logo-animated {
             position: relative;
+            display: inline-flex;
             padding: 2px;
-            border-radius: 16px;
-            background: linear-gradient(90deg, #4f46e5, #06b6d4, #10b981, #f59e0b, #4f46e5);
+            border-radius: 50%;
+            background: linear-gradient(60deg, #4f46e5, #06b6d4, #10b981, #f59e0b, #4f46e5);
             background-size: 300% 300%;
-            animation: rotatingNavBorder 6s linear infinite;
-            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
-            margin-top: 14px;
+            animation: rotateLogoBorder 4s ease infinite;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
+            flex-shrink: 0;
         }
 
-        .animated-nav-inner {
-            background: var(--surface-color);
-            border-radius: 14px;
-            padding: 8px 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .nav-logo-animated img {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--bg-color);
+            padding: 2px;
+            display: block;
+            object-fit: contain;
         }
 
-        @keyframes rotatingNavBorder {
+        @keyframes rotateLogoBorder {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
@@ -299,7 +301,7 @@
         }
 
         /* -------------------------------------------------------------
-           2. Step 16 Lime-Green Animated Celebration Card
+           2. Step 16: Lime-Green Animated Celebration Card
         ------------------------------------------------------------- */
         .lime-celebration-wrapper {
             position: relative;
@@ -327,8 +329,8 @@
         }
 
         .achievement-gif-container {
-            max-width: 220px;
-            margin: 14px auto;
+            max-width: 200px;
+            margin: 0 auto 16px auto;
             border-radius: 12px;
             overflow: hidden;
             border: 2px solid rgba(16, 185, 129, 0.5);
@@ -354,37 +356,37 @@
 </head>
 <body>
 
-    <div class="container">
-        <!-- Floating Navbar with Animated Glowing Border -->
-        <div class="animated-nav-wrapper">
-            <div class="animated-nav-inner">
-                <a class="navbar-brand fw-bold d-flex align-items-center gap-2 m-0 p-0 text-decoration-none" href="#" style="color: var(--text-main); font-size: 1.15rem;">
-                    <img src="logo.png" alt="Howrah SMP Logo" class="rounded" style="width: 32px; height: 32px; object-fit: contain;">
-                    <span>HOWRAH SMP</span>
-                </a>
+    <!-- Clean Navbar with Animated Logo Border Only -->
+    <nav class="navbar py-3 border-bottom" style="border-color: var(--border-color) !important;">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold d-flex align-items-center gap-2 m-0 p-0 text-decoration-none" href="#" style="color: var(--text-main); font-size: 1.15rem;">
+                <div class="nav-logo-animated">
+                    <img src="logo.png" alt="Howrah SMP Logo">
+                </div>
+                <span>HOWRAH SMP</span>
+            </a>
 
-                <!-- Theme & Language Controls -->
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
-                        <i class="bi bi-sun-fill d-none" id="theme-icon-light"></i>
-                        <i class="bi bi-moon-stars-fill" id="theme-icon-dark"></i>
-                    </button>
-                    
-                    <div class="btn-group" role="group">
-                        <button type="button" class="btn btn-sm btn-primary active px-2 py-1" id="lang-en" onclick="switchLanguage('en')">EN</button>
-                        <button type="button" class="btn btn-sm btn-outline-primary px-2 py-1" id="lang-bn" onclick="switchLanguage('bn')">বাং</button>
-                    </div>
+            <!-- Theme & Language Controls -->
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <i class="bi bi-sun-fill d-none" id="theme-icon-light"></i>
+                    <i class="bi bi-moon-stars-fill" id="theme-icon-dark"></i>
+                </button>
+                
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-sm btn-primary active px-2 py-1" id="lang-en" onclick="switchLanguage('en')">EN</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary px-2 py-1" id="lang-bn" onclick="switchLanguage('bn')">বাং</button>
                 </div>
             </div>
         </div>
-    </div>
+    </nav>
 
     <div class="container py-4">
         <!-- Hero Section -->
         <div class="row justify-content-center text-center mb-4">
             <div class="col-12 col-md-10 col-lg-8">
                 
-                <h1 class="display-5 fw-extrabold mb-2 mt-2" data-en="Howrah SMP Documentation" data-bn="হাওড়া SMP ডকুমেন্টেশন">
+                <h1 class="display-5 fw-extrabold mb-2" data-en="Howrah SMP Documentation" data-bn="হাওড়া SMP ডকুমেন্টেশন">
                     Howrah SMP Documentation
                 </h1>
                 
@@ -746,20 +748,23 @@
                     </div>
                 </div>
 
-                <!-- Step 16: Lime Green Animated Celebration Card with GIF -->
+                <!-- Step 16: Lime Green Animated Celebration Card (GIF on Top, Text Below) -->
                 <div class="lime-celebration-wrapper">
                     <div class="lime-celebration-inner">
+                        
+                        <!-- 1. GIF Placed at the Top -->
+                        <div class="achievement-gif-container">
+                            <img src="success.gif" alt="Celebration Animation" loading="lazy" onerror="this.style.display='none'">
+                        </div>
+
+                        <!-- 2. Congratulation Heading Below GIF -->
                         <h4 class="fw-extrabold text-success mb-2" 
                             data-en="🎉 Congratulations! All Set to Ready to Play!" 
                             data-bn="🎉 অভিনন্দন! আপনি খেলার জন্য সম্পূর্ণ প্রস্তুত!">
                             🎉 Congratulations! All Set to Ready to Play!
                         </h4>
 
-                        <!-- Custom Animated Celebration GIF -->
-                        <div class="achievement-gif-container">
-                            <img src="success.gif" alt="Celebration GIF" loading="lazy" onerror="this.style.display='none'">
-                        </div>
-
+                        <!-- 3. Final Description Text -->
                         <p class="text-muted-custom mb-0 small mx-auto" style="max-width: 540px;"
                            data-en="You have successfully completed the entire setup. Copy the Server IP & Port above, jump into Minecraft, and enjoy Howrah SMP!"
                            data-bn="আপনি সফলভাবে সব সেটিংস সম্পন্ন করেছেন। উপরের সার্ভার আইপি ও পোর্ট দিয়ে গেমে জয়েন করে হাওড়া SMP-তে খেলা উপভোগ করুন!">
@@ -806,7 +811,7 @@
             </div>
         </div>
 
-        <!-- Clean Footer with Year 2026 (Logo Removed) -->
+        <!-- Clean Footer with Year 2026 -->
         <footer class="mt-5 pt-3 text-center border-top" style="border-color: var(--border-color) !important;">
             <p class="text-muted-custom small mb-0">&copy; 2026 Howrah SMP. All rights reserved.</p>
         </footer>
