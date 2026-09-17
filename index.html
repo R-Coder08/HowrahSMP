@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Howrah SMP - Documentation & Setup</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Hind+Siliguri:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-color: #0b0f19;
+            --surface-color: #131b2e;
+            --border-color: #232f48;
+            --text-main: #ffffff;
+            --text-muted: #cbd5e1;
+            --terminal-bg: #050811;
+            --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            --req-box-bg: rgba(16, 185, 129, 0.08);
+            --req-box-border: rgba(16, 185, 129, 0.3);
+            --notice-bg: rgba(59, 130, 246, 0.08);
+            --notice-border: rgba(59, 130, 246, 0.25);
+            --step-card-bg: #131b2e;
+            --img-border: #334155;
+        }
+
+        :root[data-theme="light"] {
+            --bg-color: #f8fafc;
+            --surface-color: #ffffff;
+            --border-color: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #334155;
+            --terminal-bg: #1e293b;
+            --card-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            --req-box-bg: #ecfdf5;
+            --req-box-border: #a7f3d0;
+            --notice-bg: #eff6ff;
+            --notice-border: #bfdbfe;
+            --step-card-bg: #ffffff;
+            --img-border: #e2e8f0;
+        }
+
+        html, body {
+            overflow-x: hidden !important;
+            width: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+            transition: background-color 0.25s ease, color 0.25s ease;
+        }
+
+        p, .text-muted-custom {
+            color: var(--text-muted) !important;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .custom-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* -------------------------------------------------------------
+           1. Animated Rotating Border for Navbar
+        ------------------------------------------------------------- */
+        .animated-nav-wrapper {
+            position: relative;
+            padding: 2px;
+            border-radius: 16px;
+            background: linear-gradient(90deg, #4f46e5, #06b6d4, #10b981, #f59e0b, #4f46e5);
+            background-size: 300% 300%;
+            animation: rotatingNavBorder 6s linear infinite;
+            box-shadow: 0 4px 20px rgba(6, 182, 212, 0.2);
+            margin-top: 14px;
+        }
+
+        .animated-nav-inner {
+            background: var(--surface-color);
+            border-radius: 14px;
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @keyframes rotatingNavBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Requirements Box */
+        .requirements-box {
+            background-color: var(--req-box-bg);
+            border: 1.5px dashed var(--req-box-border);
+            border-radius: 12px;
+            padding: 14px 16px;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .req-item {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .req-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .req-icon {
+            color: #10b981;
+            font-size: 1.15rem;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .server-notice-box {
+            background-color: var(--notice-bg);
+            border: 1px solid var(--notice-border);
+            border-radius: 12px;
+            padding: 12px 16px;
+            font-size: 0.88rem;
+            text-align: left;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #ffffff !important;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 12px 24px;
+            border: none;
+            box-shadow: 0 6px 18px rgba(79, 70, 229, 0.3);
+            display: inline-block;
+            text-decoration: none;
+            cursor: pointer;
+            width: 100%;
+            max-width: 380px;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-download:active {
+            transform: scale(0.98);
+        }
+
+        .btn-wa-group, .btn-wa-channel, .btn-discord {
+            color: #ffffff !important;
+            font-weight: 600;
+            border-radius: 10px;
+            padding: 9px 14px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex: 1 1 auto;
+            min-width: 120px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-wa-channel { background: #128C7E; }
+        .btn-wa-group { background: #25D366; }
+        .btn-discord { background: #5865F2; }
+
+        .btn-wa-group:hover, .btn-wa-channel:hover, .btn-discord:hover {
+            opacity: 0.92;
+            transform: translateY(-2px);
+        }
+
+        /* Terminal Code Box */
+        .terminal-box {
+            background-color: var(--terminal-bg);
+            border-radius: 14px;
+            border: 1px solid #334155;
+            padding: 16px;
+            color: #f8fafc;
+            font-family: 'Fira Code', monospace;
+            width: 100%;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dot { width: 10px; height: 10px; border-radius: 50%; }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .code-row {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .code-value {
+            font-size: 1rem;
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* Step Card */
+        .step-card {
+            background-color: var(--step-card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 20px;
+            box-shadow: var(--card-shadow);
+            width: 100%;
+        }
+
+        .step-num-badge {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #4f46e5, #06b6d4);
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 0.9rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .step-screenshot-wrapper {
+            margin-top: 14px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--img-border);
+            width: 100%;
+            max-width: 440px;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .step-screenshot-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .warning-note-box {
+            background: rgba(239, 68, 68, 0.1);
+            border-left: 3px solid #ef4444;
+            padding: 8px 12px;
+            border-radius: 0 6px 6px 0;
+            margin-top: 10px;
+            color: #f87171;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* -------------------------------------------------------------
+           2. Step 16 Lime-Green Animated Celebration Card
+        ------------------------------------------------------------- */
+        .lime-celebration-wrapper {
+            position: relative;
+            padding: 2.5px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #10b981, #84cc16, #22c55e, #06b6d4, #10b981);
+            background-size: 300% 300%;
+            animation: limeGlowAnimation 4s ease infinite;
+            box-shadow: 0 8px 30px rgba(16, 185, 129, 0.35);
+            margin-top: 24px;
+            width: 100%;
+        }
+
+        .lime-celebration-inner {
+            background: var(--surface-color);
+            border-radius: 16px;
+            padding: 24px 16px;
+            text-align: center;
+        }
+
+        @keyframes limeGlowAnimation {
+            0% { background-position: 0% 50%; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25); }
+            50% { background-position: 100% 50%; box-shadow: 0 10px 35px rgba(132, 204, 22, 0.45); }
+            100% { background-position: 0% 50%; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.25); }
+        }
+
+        .achievement-gif-container {
+            max-width: 220px;
+            margin: 14px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid rgba(16, 185, 129, 0.5);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .achievement-gif-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .badge-op { background: #ef4444; color: white; }
+        .badge-whitelist { background: #0ea5e9; color: white; }
+
+        @media (max-width: 576px) {
+            .display-5 { font-size: 1.65rem !important; }
+            .code-row { flex-direction: column; align-items: flex-start; }
+            .copy-btn { width: 100%; margin-top: 6px; }
+            .step-card { padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Floating Navbar with Animated Glowing Border -->
+        <div class="animated-nav-wrapper">
+            <div class="animated-nav-inner">
+                <a class="navbar-brand fw-bold d-flex align-items-center gap-2 m-0 p-0 text-decoration-none" href="#" style="color: var(--text-main); font-size: 1.15rem;">
+                    <img src="logo.png" alt="Howrah SMP Logo" class="rounded" style="width: 32px; height: 32px; object-fit: contain;">
+                    <span>HOWRAH SMP</span>
+                </a>
+
+                <!-- Theme & Language Controls -->
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-2 py-1" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Theme">
+                        <i class="bi bi-sun-fill d-none" id="theme-icon-light"></i>
+                        <i class="bi bi-moon-stars-fill" id="theme-icon-dark"></i>
+                    </button>
+                    
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-sm btn-primary active px-2 py-1" id="lang-en" onclick="switchLanguage('en')">EN</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary px-2 py-1" id="lang-bn" onclick="switchLanguage('bn')">বাং</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4">
+        <!-- Hero Section -->
+        <div class="row justify-content-center text-center mb-4">
+            <div class="col-12 col-md-10 col-lg-8">
+                
+                <h1 class="display-5 fw-extrabold mb-2 mt-2" data-en="Howrah SMP Documentation" data-bn="হাওড়া SMP ডকুমেন্টেশন">
+                    Howrah SMP Documentation
+                </h1>
+                
+                <p class="text-muted-custom mb-3" 
+                   data-en="Step-by-step setup guide to connect and play on Howrah SMP."
+                   data-bn="হাওড়া SMP-তে খেলার জন্য সম্পূর্ণ সেটআপ গাইড।">
+                    Step-by-step setup guide to connect and play on Howrah SMP.
+                </p>
+
+                <!-- Requirements Box -->
+                <div class="requirements-box text-start mb-3 mx-auto">
+                    <div class="req-item">
+                        <i class="bi bi-patch-check-fill req-icon"></i>
+                        <span>Minecraft Version: 1.26.22.1</span>
+                    </div>
+                    <div class="req-item">
+                        <i class="bi bi-patch-check-fill req-icon"></i>
+                        <span>Server Supported Version: 1.26.2</span>
+                    </div>
+                    <div class="req-item">
+                        <i class="bi bi-patch-check-fill req-icon"></i>
+                        <span>100% Cracked Supported</span>
+                    </div>
+                </div>
+
+                <!-- Server Info Notice -->
+                <div class="server-notice-box mb-3 mx-auto">
+                    <div class="d-flex align-items-start gap-2">
+                        <i class="bi bi-info-circle-fill text-primary fs-6 mt-1 flex-shrink-0"></i>
+                        <div>
+                            <div class="fw-bold" data-en="Server Status & Access Rules:" data-bn="সার্ভার নিয়মাবলী:">Server Status & Access Rules:</div>
+                            <div class="text-muted-custom small" 
+                                 data-en="The server runs 24/7 as long as players are online (4-5 min inactivity limit after start). If offline or to request OP, contact Admins on WhatsApp/Discord."
+                                 data-bn="সার্ভারে প্লেয়ার থাকলে এটি ২৪/৭ চালু থাকে (স্টার্ট হওয়ার ৪-৫ মিনিটের মধ্যে জয়েন করতে হয়)। অফলাইন থাকলে বা OP হতে চাইলে যোগাযোগ করুন।">
+                                The server runs 24/7 as long as players are online (4-5 min inactivity limit after start). If offline or to request OP, contact Admins on WhatsApp/Discord.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons (Download, WhatsApp, Discord) -->
+                <div class="d-flex flex-column align-items-center gap-2">
+                    <!-- Download Minecraft Button -->
+                    <button type="button" onclick="triggerDirectDownload()" class="btn-download">
+                        <div class="d-flex align-items-center justify-content-center gap-2">
+                            <i class="bi bi-cloud-arrow-down-fill fs-5" id="download-icon"></i>
+                            <div class="text-start">
+                                <div class="fs-6" id="download-text" data-en="Download Minecraft" data-bn="মাইনক্রাফট ডাউনলোড করুন">Download Minecraft</div>
+                                <small style="font-size: 0.75rem; opacity: 0.9;">Version: 1.26.22.1</small>
+                            </div>
+                        </div>
+                    </button>
+
+                    <!-- Social Links: WhatsApp + Discord -->
+                    <div class="d-flex flex-wrap justify-content-center gap-2 w-100" style="max-width: 480px;">
+                        <a href="https://whatsapp.com/channel/0029VbDoI15K0IBfG77PCs02" target="_blank" class="btn-wa-channel">
+                            <i class="bi bi-whatsapp"></i>
+                            <span data-en="WhatsApp Channel" data-bn="হোয়াটসঅ্যাপ চ্যানেল">WhatsApp Channel</span>
+                        </a>
+                        <a href="https://chat.whatsapp.com/JRqnLfNdyYJHcXRqwRGsF1" target="_blank" class="btn-wa-group">
+                            <i class="bi bi-chat-dots-fill"></i>
+                            <span data-en="WhatsApp Group" data-bn="হোয়াটসঅ্যাপ গ্রুপ">WhatsApp Group</span>
+                        </a>
+                        <a href="https://discord.gg/YOUR_DISCORD_LINK" target="_blank" class="btn-discord">
+                            <i class="bi bi-discord"></i>
+                            <span data-en="Join Discord" data-bn="ডিসকর্ড জয়েন করুন">Join Discord</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Terminal Server Info Section -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 col-md-10 col-lg-8">
+                <div class="terminal-box shadow-sm">
+                    <div class="terminal-header">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                        <small class="text-secondary fw-bold ms-1" data-en="Server Connection Address & Port" data-bn="সার্ভার কানেকশন অ্যাড্রেস ও পোর্ট">Server Connection Address & Port</small>
+                    </div>
+
+                    <!-- Row 1: Server Address / IP -->
+                    <div class="code-row">
+                        <div>
+                            <small class="text-secondary d-block" style="font-size: 0.75rem;" data-en="SERVER IP" data-bn="সার্ভার আইপি">SERVER IP</small>
+                            <span class="fw-bold text-info code-value" id="server-ip">howrahsmp.aternos.me</span>
+                        </div>
+                        <button class="copy-btn" onclick="copyText('howrahsmp.aternos.me', this)">
+                            <i class="bi bi-clipboard me-1"></i> Copy IP
+                        </button>
+                    </div>
+
+                    <!-- Row 2: Server Port -->
+                    <div class="code-row">
+                        <div>
+                            <small class="text-secondary d-block" style="font-size: 0.75rem;" data-en="SERVER PORT" data-bn="সার্ভার পোর্ট">SERVER PORT</small>
+                            <span class="fw-bold text-warning code-value" id="server-port">59072</span>
+                        </div>
+                        <button class="copy-btn" onclick="copyText('59072', this)">
+                            <i class="bi bi-clipboard me-1"></i> Copy Port
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 16 Detailed Steps -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 col-md-10 col-lg-8">
+                
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold fs-4" data-en="Installation & Setup Steps" data-bn="ইনস্টলেশন ও সেটআপ ধাপ">Installation & Setup Steps</h2>
+                </div>
+
+                <!-- Step 1 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">1</span>
+                        <h6 class="fw-bold m-0" data-en="Download the Game" data-bn="গেম ডাউনলোড করুন">Download the Game</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-0" 
+                       data-en="Tap the 'Download Minecraft' button above to start downloading the game."
+                       data-bn="উপরের 'Download Minecraft' বাটনে ট্যাপ করে গেমটি ডাউনলোড করুন।">
+                       Tap the 'Download Minecraft' button above to start downloading the game.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">2</span>
+                        <h6 class="fw-bold m-0" data-en="Tap Download Anyway" data-bn="Download Anyway তে চাপুন">Tap Download Anyway</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Tap on the 'Download anyway' button on your screen to proceed."
+                       data-bn="'Download anyway' বাটনে ট্যাপ করে ডাউনলোড নিশ্চিত করুন।">
+                       Tap on the 'Download anyway' button on your screen to proceed.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="1.png" alt="Step 2" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">3</span>
+                        <h6 class="fw-bold m-0" data-en="Play Store > Profile Icon" data-bn="প্লে স্টোর > প্রোফাইল আইকন">Play Store > Profile Icon</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Open Google Play Store and tap on your profile icon at the top right corner."
+                       data-bn="Google Play Store ওপেন করে উপরের ডানদিকের প্রোফাইল আইকনে ট্যাপ করুন।">
+                       Open Google Play Store and tap on your profile icon at the top right corner.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="2.jpg" alt="Step 3" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">4</span>
+                        <h6 class="fw-bold m-0" data-en="Open Play Protect" data-bn="Play Protect এ যান">Open Play Protect</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="From the menu, tap on 'Play Protect'."
+                       data-bn="মেনু অপশন থেকে 'Play Protect' এ ট্যাপ করুন।">
+                       From the menu, tap on 'Play Protect'.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="3.jpg" alt="Step 4" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">5</span>
+                        <h6 class="fw-bold m-0" data-en="Tap Settings Gear" data-bn="সেটিংস গিয়ারে ট্যাপ করুন">Tap Settings Gear</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Tap on the Settings (gear) icon at the top right corner."
+                       data-bn="উপরের ডানদিকের সেটিংস (গিয়ার) আইকনে ট্যাপ করুন।">
+                       Tap on the Settings (gear) icon at the top right corner.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="4.jpg" alt="Step 5" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">6</span>
+                        <h6 class="fw-bold m-0" data-en="Disable App Scanning" data-bn="অ্যাপ স্ক্যানিং বন্ধ করুন">Disable App Scanning</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Turn off the 'Scan apps with Play Protect' toggle."
+                       data-bn="'Scan apps with Play Protect' অপশনটি বন্ধ করুন।">
+                       Turn off the 'Scan apps with Play Protect' toggle.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="5.jpg" alt="Step 6" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 7 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">7</span>
+                        <h6 class="fw-bold m-0" data-en="Confirm Turn Off" data-bn="Turn Off নিশ্চিত করুন">Confirm Turn Off</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="When prompted, tap on 'Turn off'."
+                       data-bn="কনফার্মেশন আসলে 'Turn off' এ চাপুন।">
+                       When prompted, tap on 'Turn off'.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="6.jpg" alt="Step 7" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 8 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">8</span>
+                        <h6 class="fw-bold m-0" data-en="Install Minecraft APK" data-bn="মাইনক্রাফট APK ইনস্টল করুন">Install Minecraft APK</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Open your Downloads folder and install the downloaded APK file."
+                       data-bn="ডাউনলোড ফোল্ডারে গিয়ে APK ফাইলটি ইনস্টল করুন।">
+                       Open your Downloads folder and install the downloaded APK file.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="7.jpg" alt="Step 8" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 9 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">9</span>
+                        <h6 class="fw-bold m-0" data-en="Open Minecraft" data-bn="মাইনক্রাফট ওপেন করুন">Open Minecraft</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Tap the 'Open' button to start Minecraft."
+                       data-bn="'Open' বাটনে চাপ দিয়ে গেমটি চালু করুন।">
+                       Tap the 'Open' button to start Minecraft.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="8.jpg" alt="Step 9" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 10 -->
+                <div class="step-card border-danger-subtle">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge bg-danger">10</span>
+                        <h6 class="fw-bold m-0" data-en="Cancel Update Popup (IMPORTANT)" data-bn="আপডেট পপআপ Cancel করুন">Cancel Update Popup (IMPORTANT)</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="When the update popup appears, tap on 'Cancel'."
+                       data-bn="আপডেটের পপআপ আসলে 'Cancel' এ ট্যাপ করুন।">
+                       When the update popup appears, tap on 'Cancel'.
+                    </p>
+                    <div class="warning-note-box">
+                        <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                        <span data-en="NOTE: Never tap the Update button! Always tap Cancel."
+                              data-bn="সতর্কতা: ভুলেও Update বাটনে চাপবেন না! সবসময় Cancel করবেন।">
+                            NOTE: Never tap the Update button! Always tap Cancel.
+                        </span>
+                    </div>
+                    <div class="step-screenshot-wrapper mt-3">
+                        <img src="9.jpg" alt="Step 10" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 11 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">11</span>
+                        <h6 class="fw-bold m-0" data-en="Open Game Settings" data-bn="গেম Settings এ যান">Open Game Settings</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="On the Minecraft main menu, tap on 'Settings'."
+                       data-bn="মাইনক্রাফট হোম স্ক্রিন থেকে 'Settings' এ চাপুন।">
+                       On the Minecraft main menu, tap on 'Settings'.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="10.jpg" alt="Step 11" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 12 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">12</span>
+                        <h6 class="fw-bold m-0" data-en="Enable Mobile Data for Online Play" data-bn="মোবাইল ডেটা অন করুন">Enable Mobile Data for Online Play</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Go to the 'General' tab and turn on 'Allow mobile data for online play'."
+                       data-bn="'General' ট্যাবে গিয়ে 'Allow mobile data for online play' অন করুন।">
+                       Go to the 'General' tab and turn on 'Allow mobile data for online play'.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="11.jpg" alt="Step 12" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 13 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">13</span>
+                        <h6 class="fw-bold m-0" data-en="Confirm Cellular Prompt" data-bn="OK তে চাপুন">Confirm Cellular Prompt</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Tap 'OK' on the confirmation prompt."
+                       data-bn="কনফার্মেশন আসলে 'OK' বাটনে চাপুন।">
+                       Tap 'OK' on the confirmation prompt.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="12.jpg" alt="Step 13" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 14 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">14</span>
+                        <h6 class="fw-bold m-0" data-en="Auto Update Unlocked Packs" data-bn="Auto Update Packs এ চাপুন">Auto Update Unlocked Packs</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Tap on 'Auto update unlocked packs'."
+                       data-bn="'Auto update unlocked packs' অপশনে চাপ দিন।">
+                       Tap on 'Auto update unlocked packs'.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="13.jpg" alt="Step 14" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 15 -->
+                <div class="step-card">
+                    <div class="d-flex align-items-center">
+                        <span class="step-num-badge">15</span>
+                        <h6 class="fw-bold m-0" data-en="Set Wi-Fi or Mobile Data" data-bn="Wi-Fi or Mobile Data সেট করুন">Set Wi-Fi or Mobile Data</h6>
+                    </div>
+                    <p class="text-muted-custom mt-2 mb-2" 
+                       data-en="Select 'On with Wi-Fi or mobile data'."
+                       data-bn="'On with Wi-Fi or mobile data' অপশনটি সিলেক্ট করুন।">
+                       Select 'On with Wi-Fi or mobile data'.
+                    </p>
+                    <div class="step-screenshot-wrapper">
+                        <img src="14.jpg" alt="Step 15" loading="lazy">
+                    </div>
+                </div>
+
+                <!-- Step 16: Lime Green Animated Celebration Card with GIF -->
+                <div class="lime-celebration-wrapper">
+                    <div class="lime-celebration-inner">
+                        <h4 class="fw-extrabold text-success mb-2" 
+                            data-en="🎉 Congratulations! All Set to Ready to Play!" 
+                            data-bn="🎉 অভিনন্দন! আপনি খেলার জন্য সম্পূর্ণ প্রস্তুত!">
+                            🎉 Congratulations! All Set to Ready to Play!
+                        </h4>
+
+                        <!-- Custom Animated Celebration GIF -->
+                        <div class="achievement-gif-container">
+                            <img src="success.gif" alt="Celebration GIF" loading="lazy" onerror="this.style.display='none'">
+                        </div>
+
+                        <p class="text-muted-custom mb-0 small mx-auto" style="max-width: 540px;"
+                           data-en="You have successfully completed the entire setup. Copy the Server IP & Port above, jump into Minecraft, and enjoy Howrah SMP!"
+                           data-bn="আপনি সফলভাবে সব সেটিংস সম্পন্ন করেছেন। উপরের সার্ভার আইপি ও পোর্ট দিয়ে গেমে জয়েন করে হাওড়া SMP-তে খেলা উপভোগ করুন!">
+                           You have successfully completed the entire setup. Copy the Server IP & Port above, jump into Minecraft, and enjoy Howrah SMP!
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- OPs & Whitelist Section with Live Google Sheet -->
+        <div class="row g-3 justify-content-center">
+            <div class="col-12 text-center mb-1">
+                <h4 class="fw-bold fs-5" data-en="Server Staff (OPs) & Whitelist" data-bn="সার্ভার স্টাফ ও হোয়াইটলিস্ট">Server Staff (OPs) & Whitelist</h4>
+            </div>
+
+            <!-- OPs Card -->
+            <div class="col-12 col-md-5">
+                <div class="custom-card p-3 h-100">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-shield-fill-check text-danger fs-5 me-2"></i>
+                        <h6 class="fw-bold m-0" data-en="Operators (OP)" data-bn="সার্ভার অপারেটর (OP)">Operators (OP)</h6>
+                    </div>
+                    <div id="op-list" class="d-flex flex-wrap gap-2 pt-1">
+                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                        <span class="text-muted-custom small">Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Whitelisted Players Card -->
+            <div class="col-12 col-md-5">
+                <div class="custom-card p-3 h-100">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="bi bi-people-fill text-info fs-5 me-2"></i>
+                        <h6 class="fw-bold m-0" data-en="Whitelisted Players" data-bn="হোয়াইটলিস্টেড প্লেয়ার">Whitelisted Players</h6>
+                    </div>
+                    <div id="whitelist-list" class="d-flex flex-wrap gap-2 pt-1">
+                        <div class="spinner-border spinner-border-sm text-info" role="status"></div>
+                        <span class="text-muted-custom small">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clean Footer with Year 2026 (Logo Removed) -->
+        <footer class="mt-5 pt-3 text-center border-top" style="border-color: var(--border-color) !important;">
+            <p class="text-muted-custom small mb-0">&copy; 2026 Howrah SMP. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript Section -->
+    <script>
+        // 1. Direct Download Trigger
+        const GOOGLE_DRIVE_FILE_ID = "1WLPOpWiKwB7-QP_DnmqaCkLgwTEl4XEp"; 
+
+        function triggerDirectDownload() {
+            const btnText = document.getElementById('download-text');
+            const icon = document.getElementById('download-icon');
+            const originalText = btnText.innerText;
+
+            btnText.innerText = "Downloading...";
+            icon.className = "spinner-border spinner-border-sm me-2";
+
+            const directDownloadUrl = `https://drive.usercontent.google.com/download?id=${GOOGLE_DRIVE_FILE_ID}&export=download&authuser=0&confirm=t`;
+
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.href = directDownloadUrl;
+            downloadAnchor.setAttribute('download', 'Minecraft_HowrahSMP.apk');
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            document.body.removeChild(downloadAnchor);
+
+            setTimeout(() => {
+                btnText.innerText = originalText;
+                icon.className = "bi bi-cloud-arrow-down-fill fs-5";
+            }, 3000);
+        }
+
+        // 2. Clipboard Copy Functionality
+        function copyText(text, btnElement) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalContent = btnElement.innerHTML;
+                btnElement.innerHTML = `<i class="bi bi-check2"></i> Copied!`;
+                btnElement.style.background = "#10b981";
+                btnElement.style.color = "#fff";
+                setTimeout(() => {
+                    btnElement.innerHTML = originalContent;
+                    btnElement.style.background = "";
+                    btnElement.style.color = "";
+                }, 2000);
+            });
+        }
+
+        // 3. Theme Toggle (Dark & Light Mode)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute("data-theme");
+            const newTheme = currentTheme === "dark" ? "light" : "dark";
+            
+            html.setAttribute("data-theme", newTheme);
+            
+            document.getElementById('theme-icon-light').classList.toggle('d-none', newTheme === 'dark');
+            document.getElementById('theme-icon-dark').classList.toggle('d-none', newTheme === 'light');
+        }
+
+        // 4. Bilingual Support (English & Bengali)
+        function switchLanguage(lang) {
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.innerText = (lang === 'bn') ? el.getAttribute('data-bn') : el.getAttribute('data-en');
+            });
+
+            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+            document.getElementById('lang-en').classList.toggle('btn-primary', lang === 'en');
+            document.getElementById('lang-en').classList.toggle('btn-outline-primary', lang !== 'en');
+
+            document.getElementById('lang-bn').classList.toggle('active', lang === 'bn');
+            document.getElementById('lang-bn').classList.toggle('btn-primary', lang === 'bn');
+            document.getElementById('lang-bn').classList.toggle('btn-outline-primary', lang !== 'bn');
+        }
+
+        // 5. Fetch Google Sheet Data via Apps Script
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwekiA4-y8IZXRgBB88Ff0thbYRMgITosOQgOaX92Yl0zVGXkGe0s8Zc5x9AM9N9M8l7w/exec";
+
+        async function fetchServerMembers() {
+            const opContainer = document.getElementById('op-list');
+            const whitelistContainer = document.getElementById('whitelist-list');
+
+            if (!APPS_SCRIPT_URL || APPS_SCRIPT_URL.trim() === "") {
+                showFetchError(opContainer, "Server URL is missing.");
+                showFetchError(whitelistContainer, "Server URL is missing.");
+                return;
+            }
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL);
+                if (!response.ok) throw new Error("HTTP error " + response.status);
+                
+                const data = await response.json();
+                renderMembers(data.ops, opContainer, 'badge-op');
+                renderMembers(data.whitelisted, whitelistContainer, 'badge-whitelist');
+            } catch (error) {
+                console.error("Fetch failed:", error);
+                showFetchError(opContainer, "Unable to connect.");
+                showFetchError(whitelistContainer, "Unable to connect.");
+            }
+        }
+
+        function renderMembers(items, container, badgeClass) {
+            container.innerHTML = '';
+            if (!items || items.length === 0) {
+                container.innerHTML = '<span class="text-muted-custom small">No players listed</span>';
+                return;
+            }
+            items.forEach(name => {
+                const badge = document.createElement('span');
+                badge.className = `badge rounded-pill px-3 py-1 ${badgeClass}`;
+                badge.style.fontSize = '0.82rem';
+                badge.innerHTML = `<i class="bi bi-person-fill me-1"></i> ${name}`;
+                container.appendChild(badge);
+            });
+        }
+
+        function showFetchError(container, message) {
+            container.innerHTML = `
+                <div class="alert alert-danger d-flex align-items-center py-1 px-2 mb-0 w-100 rounded" role="alert" style="font-size: 0.8rem;">
+                    <i class="bi bi-exclamation-triangle-fill me-1 fs-6"></i>
+                    <div>${message}</div>
+                </div>
+            `;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchServerMembers();
+        });
+    </script>
+</body>
+</html>
